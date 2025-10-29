@@ -1,0 +1,4 @@
+# Ignore local large model directory
+src/vlm_agent/vosk-model-cn-0.22/
+
+
