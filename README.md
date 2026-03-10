@@ -104,6 +104,12 @@ MoveIt 运动规划框架的配置文件集合。
 
 ## 环境配置
 
+### 不想配置可以下载配置好的镜像（VMWARE）
+
+通过网盘分享的文件：dummy_ros2_vmware.rar
+链接: https://pan.baidu.com/s/1RXnZTWswST4H9HLcxrATJw?pwd=lhyn 提取码: lhyn 
+--来自百度网盘超级会员v7的分享
+
 ### 系统要求
 - **操作系统**: Ubuntu 22.04
 - **ROS 版本**: ROS2 Humble
