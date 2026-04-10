@@ -1,10 +1,3 @@
-# 引用相关仓库
-### 由于本项目重新烧录了末端含自制夹爪的主控固件，因此引用仓库中的程序不全适用，但一般不会对机械臂产生损害，可以部分参考
-
-> 木子改良版本的机械臂：https://gitee.com/switchpi/dummy.git [here](https://gitee.com/switchpi/dummy.git)!
-
-> hata8210配置的moveit接入：https://github.com/hata8210/dummy_moveit_ws.git [here](https://github.com/hata8210/dummy_moveit_ws.git)!
-
 # Dummy Robot Arm - ROS2 项目
 
 基于 ROS2 Humble 的六自由度夹爪机械臂控制系统，集成 MoveIt 运动规划、视觉感知和智能代理功能。
@@ -19,6 +12,11 @@
 - 多种实用工具和示例程序
 
 ---
+
+
+## 演示视频
+
+![机械臂演示视频](演示视频.gif)
 
 ## 目录结构
 
@@ -270,3 +268,11 @@ python3 src/dummy_tools/moveit_rviz_planner.py
 ```bash
 rosdep install --from-paths src --ignore-src -r -y
 ```
+
+
+# 引用相关仓库
+### 由于本项目重新烧录了末端含自制夹爪的主控固件，因此引用仓库中的程序不全适用，但一般不会对机械臂产生损害，可以部分参考
+
+> 木子改良版本的机械臂：https://gitee.com/switchpi/dummy.git [here](https://gitee.com/switchpi/dummy.git)!
+
+> hata8210配置的moveit接入：https://github.com/hata8210/dummy_moveit_ws.git [here](https://github.com/hata8210/dummy_moveit_ws.git)!
