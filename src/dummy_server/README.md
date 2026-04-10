@@ -1,109 +1,109 @@
-# Dummy2 机械臂 - ROS 2 与 VLM 集成项目
+# Dummy2 Robot Arm - ROS 2 & VLM Integration Project
 
-## 项目概述
+## Project Overview
 
-这是一个针对自制 Dummy2 六轴机械臂的完整 ROS 2 与视觉语言模型（VLM）集成项目。项目成功实现了：
+A complete ROS 2 and Vision Language Model (VLM) integration project for the custom-built Dummy2 six-axis robotic arm. The project successfully implements:
 
-- **ROS 2 与下位机通信** - 通过自定义协议与机械臂控制器的可靠通信
-- **MoveIt 2 运动规划** - 基于 RRTConnect 算法的轨迹规划与碰撞检测
-- **VLM 视觉感知** - 集成智谱 AI GLM-4.5V 进行物体检测与定位
-- **VLA 具身智能** - 通过 VLM + 提示词引导实现视觉-语言-动作的闭环控制
+- **ROS 2 & Microcontroller Communication** - Reliable communication with arm controller via custom protocol
+- **MoveIt 2 Motion Planning** - Trajectory planning and collision detection based on RRTConnect algorithm
+- **VLM Visual Perception** - Integration with Zhipu AI GLM-4.5V for object detection and localization
+- **VLA Embodied Intelligence** - Closed-loop vision-language-action control via VLM + prompt guidance
 
-### 项目特色
+### Project Highlights
 
-本项目采用 **VLM + 提示词引导** 的方式实现 VLA（Vision-Language-Action），相比纯正的端到端 VLA 模型有以下特点：
+This project implements VLA (Vision-Language-Action) using **VLM + prompt guidance**, with these advantages over pure end-to-end VLA models:
 
-- ✅ **低成本快速体验** - 无需大规模训练数据，快速验证具身智能概念
-- ✅ **易于定制** - 通过修改提示词灵活调整机械臂行为
-- ✅ **支持低端硬件** - 对计算资源要求低，适合教学和研究
-- ⚠️ **精度有限** - 不如端到端模型精准，适合演示而非生产环境
-
----
-
-## 核心功能演示
-
-### 视频演示
-
-![Dummy2 机械臂 VLM 演示](../../待转GIF.gif)
-
-*上图展示了机械臂通过 VLM 视觉反馈自主完成物体抓取任务的完整流程。演示包括：物体检测 → 坐标转换 → 运动规划 → 自主抓取*
+- ✅ **Low-cost Quick Experience** - No large-scale training data needed, quickly validate embodied AI concepts
+- ✅ **Easy Customization** - Flexible arm behavior adjustment through prompt modification
+- ✅ **Low Hardware Requirements** - Minimal computational resources, suitable for education and research
+- ⚠️ **Limited Precision** - Less accurate than end-to-end models, suitable for demos rather than production
 
 ---
 
-## 系统架构
+## Core Feature Demo
+
+### Video Demo
+
+![Dummy2 Robot Arm VLM Demo](../../待转GIF.gif)
+
+*The image above shows the complete process of the arm autonomously completing object grasping tasks through VLM visual feedback. The demo includes: object detection → coordinate transformation → motion planning → autonomous grasping*
+
+---
+
+## System Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    用户指令 (语音/文本)                      │
+│                 User Instructions (Voice/Text)              │
 └────────────────────────┬────────────────────────────────────┘
                          │
                          ▼
         ┌────────────────────────────────┐
-        │   LLM 任务规划与分解            │
-        │   (智谱 AI GLM)                 │
+        │   LLM Task Planning & Decomposition │
+        │   (Zhipu AI GLM)                 │
         └────────────┬───────────────────┘
                      │
         ┌────────────▼───────────────────┐
-        │   VLM 物体检测与定位            │
-        │   (智谱 AI GLM-4.5V)            │
+        │   VLM Object Detection & Localization │
+        │   (Zhipu AI GLM-4.5V)            │
         └────────────┬───────────────────┘
                      │
         ┌────────────▼───────────────────┐
-        │   相机校准与坐标转换            │
-        │   (像素 → 世界坐标)             │
+        │   Camera Calibration & Coordinate Transformation │
+        │   (Pixel → World Coordinates)             │
         └────────────┬───────────────────┘
                      │
         ┌────────────▼───────────────────┐
-        │   MoveIt 2 运动规划             │
-        │   (RRTConnect + 碰撞检测)       │
+        │   MoveIt 2 Motion Planning             │
+        │   (RRTConnect + Collision Detection)       │
         └────────────┬───────────────────┘
                      │
         ┌────────────▼───────────────────┐
-        │   ROS 2 Action 执行             │
-        │   (轨迹跟踪与反馈)              │
+        │   ROS 2 Action Execution             │
+        │   (Trajectory Tracking & Feedback)              │
         └────────────┬───────────────────┘
                      │
         ┌────────────▼───────────────────┐
-        │   机械臂硬件控制                │
-        │   (关节驱动与夹爪控制)          │
+        │   Robot Hardware Control                │
+        │   (Joint Drive & Gripper Control)          │
         └────────────────────────────────┘
 ```
 
 ---
 
-## 快速开始
+## Quick Start
 
-### 环境要求
+### Environment Requirements
 
-- **操作系统** - Ubuntu 22.04 LTS
-- **ROS 2** - Humble 或 Iron
+- **Operating System** - Ubuntu 22.04 LTS
+- **ROS 2** - Humble or Iron
 - **Python** - 3.10+
-- **硬件** - Dummy2 机械臂 + RealSense 相机
+- **Hardware** - Dummy2 robot arm + RealSense camera
 
-### 安装依赖
+### Install Dependencies
 
 ```bash
-# 安装 ROS 2 和 MoveIt 2
+# Install ROS 2 and MoveIt 2
 sudo apt install ros-humble-moveit ros-humble-ros2-control
 
-# 安装 Python 依赖
+# Install Python dependencies
 pip install -r requirements.txt
 ```
 
-### 启动系统
+### Start System
 
-1. **启动 MoveIt 演示环境：**
+1. **Start MoveIt demo environment:**
    ```bash
    ros2 launch dummy_moveit_config demo_real_arm.launch.py
    ```
 
-2. **在另一个终端启动 VLM 代理：**
+2. **Start VLM agent in another terminal:**
    ```bash
    cd src/vlm_agent
    python3 agent.py
    ```
 
-3. **或使用简化版控制器：**
+3. **Or use simplified controller:**
    ```bash
    cd src/dummy_tools
    python3 simple_moveit_controller.py
@@ -111,107 +111,107 @@ pip install -r requirements.txt
 
 ---
 
-## 项目结构
+## Project Structure
 
 ```
 dummy_demo/
 ├── src/
-│   ├── dummy_controller/          # 下位机通信与控制
-│   ├── dummy_moveit_config/       # MoveIt 2 配置
-│   ├── dummy-ros2_description/    # URDF 模型与网格
-│   ├── dummy_server/              # pymoveit2 库（本目录）
-│   ├── dummy_tools/               # 工具集（规划、显示、障碍物）
-│   └── vlm_agent/                 # VLM 代理系统
-├── install/                       # 编译输出
-└── README.md                      # 项目说明
+│   ├── dummy_controller/          # Microcontroller communication & control
+│   ├── dummy_moveit_config/       # MoveIt 2 configuration
+│   ├── dummy-ros2_description/    # URDF model & meshes
+│   ├── dummy_server/              # pymoveit2 library (this directory)
+│   ├── dummy_tools/               # Toolkit (planning, display, obstacles)
+│   └── vlm_agent/                 # VLM agent system
+├── install/                       # Build output
+└── README.md                      # Project documentation
 ```
 
 ---
 
-## 核心模块说明
+## Core Module Documentation
 
-### 1. dummy_controller - 下位机通信
+### 1. dummy_controller - Microcontroller Communication
 
-负责与机械臂硬件的通信和控制。
+Handles communication and control with robot hardware.
 
-**关键文件：**
-- `dummy_arm_controller.py` - 主控制器
-- `moveit_server.py` - MoveIt 服务接口
-- `dummy_cli_tool/` - 命令行工具集
+**Key Files:**
+- `dummy_arm_controller.py` - Main controller
+- `moveit_server.py` - MoveIt service interface
+- `dummy_cli_tool/` - Command-line toolkit
 
-**功能：**
-- 关节状态发布
-- 轨迹执行
-- 夹爪控制
-- 使能/去使能管理
+**Features:**
+- Joint state publishing
+- Trajectory execution
+- Gripper control
+- Enable/disable management
 
-### 2. dummy_moveit_config - 运动规划配置
+### 2. dummy_moveit_config - Motion Planning Configuration
 
-MoveIt 2 的配置包，包含机械臂的运动学和规划参数。
+MoveIt 2 configuration package containing arm kinematics and planning parameters.
 
-**关键文件：**
-- `config/dummy-ros2.srdf` - 语义机器人描述
-- `config/kinematics.yaml` - 逆运动学求解器配置
-- `config/moveit_controllers.yaml` - 控制器配置
-- `launch/demo_real_arm.launch.py` - 启动脚本
+**Key Files:**
+- `config/dummy-ros2.srdf` - Semantic robot description
+- `config/kinematics.yaml` - Inverse kinematics solver configuration
+- `config/moveit_controllers.yaml` - Controller configuration
+- `launch/demo_real_arm.launch.py` - Launch script
 
-### 3. dummy-ros2_description - 机械臂模型
+### 3. dummy-ros2_description - Robot Model
 
-URDF 模型和 STL 网格文件。
+URDF model and STL mesh files.
 
-**关键文件：**
-- `urdf/dummy-ros2.xacro` - 机械臂 URDF 定义
-- `meshes/` - 各关节的 3D 网格
+**Key Files:**
+- `urdf/dummy-ros2.xacro` - Robot URDF definition
+- `meshes/` - 3D meshes for each joint
 
-### 4. dummy_tools - 工具集
+### 4. dummy_tools - Toolkit
 
-提供规划、显示和障碍物管理的工具。
+Tools for planning, display, and obstacle management.
 
-**主要工具：**
-- `moveit_rviz_planner.py` - RViz 自动规划执行器
-- `simple_moveit_controller.py` - 简化版控制器
-- `show_realsense_rgb.py` - 相机显示
-- `add_obstacles.py` - 障碍物添加
+**Main Tools:**
+- `moveit_rviz_planner.py` - RViz automatic planner executor
+- `simple_moveit_controller.py` - Simplified controller
+- `show_realsense_rgb.py` - Camera display
+- `add_obstacles.py` - Obstacle addition
 
-详见 [dummy_tools/README.md](../dummy_tools/README.md)
+See [dummy_tools/README.md](../dummy_tools/README.md)
 
-### 5. vlm_agent - VLM 代理系统
+### 5. vlm_agent - VLM Agent System
 
-实现视觉语言模型的集成和自主任务执行。
+Implements vision language model integration and autonomous task execution.
 
-**核心模块：**
-- `vlm.py` - VLM 接口（物体检测）
-- `llm.py` - LLM 接口（任务规划）
-- `agent.py` - 主代理逻辑
-- `stt.py` - 语音转文本
+**Core Modules:**
+- `vlm.py` - VLM interface (object detection)
+- `llm.py` - LLM interface (task planning)
+- `agent.py` - Main agent logic
+- `stt.py` - Speech-to-text
 
-详见 [vlm_agent/README.md](../vlm_agent/README.md)
+See [vlm_agent/README.md](../vlm_agent/README.md)
 
 ---
 
-## pymoveit2 库
+## pymoveit2 Library
 
-本目录包含 `pymoveit2` - 一个基于 ROS 2 actions 和 services 的 Python MoveIt 2 接口库。
+This directory contains `pymoveit2` - a Python MoveIt 2 interface library based on ROS 2 actions and services.
 
-**主要类和函数：**
+**Main Classes and Functions:**
 
-- `MoveIt2` - 主控制类
-- `MoveIt2Gripper` - 夹爪控制
-- `MoveIt2Servo` - 实时伺服控制
+- `MoveIt2` - Main control class
+- `MoveIt2Gripper` - Gripper control
+- `MoveIt2Servo` - Real-time servo control
 
-**使用示例：**
+**Usage Example:**
 
 ```python
 from pymoveit2 import MoveIt2
 from geometry_msgs.msg import PoseStamped
 
-# 初始化
+# Initialize
 moveit2 = MoveIt2(node, "dummy_arm", "base_link")
 
-# 移动到关节位置
+# Move to joint position
 moveit2.move_to_configuration([0, -1.57, 0, -1.57, 0, 1.57])
 
-# 移动到笛卡尔位姿
+# Move to Cartesian pose
 pose = PoseStamped()
 pose.pose.position.x = 0.3
 pose.pose.position.y = 0.2
@@ -219,13 +219,13 @@ pose.pose.position.z = 0.5
 moveit2.move_to_pose(pose)
 ```
 
-详见 [pymoveit2/](./pymoveit2/) 目录
+See [pymoveit2/](./pymoveit2/) directory
 
 ---
 
-## 使用示例
+## Usage Examples
 
-### 示例 1: 基础关节运动
+### Example 1: Basic Joint Motion
 
 ```python
 import rclpy
@@ -236,13 +236,13 @@ node = rclpy.create_node("example")
 
 moveit2 = MoveIt2(node, "dummy_arm", "base_link")
 
-# 移动到指定关节角度
+# Move to specified joint angles
 moveit2.move_to_configuration([0.0, -1.57, 0.0, -1.57, 0.0, 1.57])
 
 rclpy.shutdown()
 ```
 
-### 示例 2: 笛卡尔空间运动
+### Example 2: Cartesian Space Motion
 
 ```python
 from geometry_msgs.msg import PoseStamped
@@ -254,7 +254,7 @@ pose.pose.position.x = 0.3
 pose.pose.position.y = 0.2
 pose.pose.position.z = 0.5
 
-# 设置姿态（RPY: 0, 0, 0）
+# Set orientation (RPY: 0, 0, 0)
 q = quaternion_from_euler(0, 0, 0)
 pose.pose.orientation.x = q[0]
 pose.pose.orientation.y = q[1]
@@ -264,72 +264,72 @@ pose.pose.orientation.w = q[3]
 moveit2.move_to_pose(pose)
 ```
 
-### 示例 3: 夹爪控制
+### Example 3: Gripper Control
 
 ```python
 from pymoveit2 import MoveIt2Gripper
 
 gripper = MoveIt2Gripper(node, "dummy_arm")
 
-# 打开夹爪
+# Open gripper
 gripper.open()
 
-# 关闭夹爪
+# Close gripper
 gripper.close()
 ```
 
 ---
 
-## 常见问题
+## FAQ
 
-### Q: 如何校准相机坐标系？
+### Q: How to calibrate camera coordinate system?
 
-A: 在 `vlm_agent/agent.py` 中修改 `CALIBRATION_CONFIG`：
-1. 在 RViz 中标记两个已知世界坐标的点
-2. 记录这两个点在图像中的像素坐标
-3. 更新配置中的校准参数
+A: Modify `CALIBRATION_CONFIG` in `vlm_agent/agent.py`:
+1. Mark two points with known world coordinates in RViz
+2. Record pixel coordinates of these points in the image
+3. Update calibration parameters in config
 
-### Q: VLM 调用失败怎么办？
+### Q: What if VLM call fails?
 
-A: 检查以下几点：
-- 环境变量 `ZHIPUAI_API_KEY` 是否正确设置
-- 网络连接是否正常
-- API 配额是否充足
+A: Check the following:
+- Environment variable `ZHIPUAI_API_KEY` is correctly set
+- Network connection is normal
+- API quota is sufficient
 
-### Q: 机械臂无法连接？
+### Q: Robot arm cannot connect?
 
-A: 确保：
-- ROS 2 环境已正确 source：`source install/setup.bash`
-- MoveIt 演示环境已启动
-- 机械臂硬件已连接并通电
+A: Ensure:
+- ROS 2 environment is correctly sourced: `source install/setup.bash`
+- MoveIt demo environment is started
+- Robot hardware is connected and powered
 
-### Q: 如何自定义运动规划参数？
+### Q: How to customize motion planning parameters?
 
-A: 修改 `dummy_moveit_config/config/moveit_controllers.yaml` 中的参数：
-- `max_velocity_scaling_factor` - 最大速度缩放因子
-- `max_acceleration_scaling_factor` - 最大加速度缩放因子
-- `allowed_planning_time` - 规划超时时间
+A: Modify parameters in `dummy_moveit_config/config/moveit_controllers.yaml`:
+- `max_velocity_scaling_factor` - Maximum velocity scaling factor
+- `max_acceleration_scaling_factor` - Maximum acceleration scaling factor
+- `allowed_planning_time` - Planning timeout
 
 ---
 
-## 文件说明
+## File Documentation
 
 ### Instructions
 
-本目录包含 pymoveit2 库的完整实现和使用示例。
+This directory contains the complete implementation of pymoveit2 library and usage examples.
 
 ### Dependencies
 
-这些是使用本项目的主要依赖：
+Main dependencies for using this project:
 
 - ROS 2 Humble/Iron
 - MoveIt 2
-- pyrealsense2（用于相机）
-- 智谱 AI SDK（用于 VLM）
+- pyrealsense2 (for camera)
+- Zhipu AI SDK (for VLM)
 
 ### Building
 
-使用 colcon 编译：
+Build using colcon:
 
 ```bash
 cd /path/to/workspace
@@ -338,7 +338,7 @@ colcon build --merge-install --symlink-install --cmake-args "-DCMAKE_BUILD_TYPE=
 
 ### Sourcing
 
-编译完成后，source 工作空间：
+After building, source the workspace:
 
 ```bash
 source install/local_setup.bash
@@ -348,18 +348,18 @@ source install/local_setup.bash
 
 ## Examples
 
-`examples/` 目录包含多个演示脚本：
+The `examples/` directory contains multiple demo scripts:
 
-- `ex_joint_goal.py` - 关节空间运动
-- `ex_pose_goal.py` - 笛卡尔空间运动
-- `ex_gripper.py` - 夹爪控制
-- `ex_servo.py` - 实时伺服控制
-- `ex_collision_primitive.py` - 添加原始几何障碍物
-- `ex_collision_mesh.py` - 添加网格障碍物
-- `ex_fk.py` - 正运动学求解
-- `ex_ik.py` - 逆运动学求解
+- `ex_joint_goal.py` - Joint space motion
+- `ex_pose_goal.py` - Cartesian space motion
+- `ex_gripper.py` - Gripper control
+- `ex_servo.py` - Real-time servo control
+- `ex_collision_primitive.py` - Add primitive geometry obstacles
+- `ex_collision_mesh.py` - Add mesh obstacles
+- `ex_fk.py` - Forward kinematics solving
+- `ex_ik.py` - Inverse kinematics solving
 
-运行示例：
+Run examples:
 
 ```bash
 ros2 run dummy_server ex_joint_goal.py --ros-args -p joint_positions:="[0, -1.57, 0, -1.57, 0, 1.57]"
@@ -371,29 +371,29 @@ ros2 run dummy_server ex_joint_goal.py --ros-args -p joint_positions:="[0, -1.57
 
 ```
 .
-├── examples/              # 演示脚本
-├── pymoveit2/             # pymoveit2 库
-│   ├── moveit2.py         # 主控制类
-│   ├── moveit2_gripper.py # 夹爪控制
-│   ├── moveit2_servo.py   # 伺服控制
-│   ├── robots/            # 机器人预设配置
-│   └── utils.py           # 工具函数
-├── CMakeLists.txt         # CMake 配置
-├── package.xml            # ROS 2 包配置
-└── README.md              # 本文件
+├── examples/              # Demo scripts
+├── pymoveit2/             # pymoveit2 library
+│   ├── moveit2.py         # Main control class
+│   ├── moveit2_gripper.py # Gripper control
+│   ├── moveit2_servo.py   # Servo control
+│   ├── robots/            # Robot preset configurations
+│   └── utils.py           # Utility functions
+├── CMakeLists.txt         # CMake configuration
+├── package.xml            # ROS 2 package configuration
+└── README.md              # This file
 ```
 
 ---
 
-## 许可证
+## License
 
-本项目采用 MIT 许可证。详见 [LICENSE](./LICENSE) 文件。
+This project is licensed under the MIT License. See [LICENSE](./LICENSE) file for details.
 
 ---
 
-## 参考资源
+## References
 
-- [MoveIt 2 官方文档](https://moveit.ros.org/)
-- [ROS 2 官方文档](https://docs.ros.org/en/humble/)
-- [pymoveit2 原始项目](https://github.com/AndrejOrsula/pymoveit2)
-- [智谱 AI 文档](https://open.bigmodel.cn/)
+- [MoveIt 2 Official Documentation](https://moveit.ros.org/)
+- [ROS 2 Official Documentation](https://docs.ros.org/en/humble/)
+- [pymoveit2 Original Project](https://github.com/AndrejOrsula/pymoveit2)
+- [Zhipu AI Documentation](https://open.bigmodel.cn/)

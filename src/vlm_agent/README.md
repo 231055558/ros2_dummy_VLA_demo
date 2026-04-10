@@ -1,73 +1,73 @@
-# vlm_agent - 视觉语言模型代理
+# vlm_agent - Vision Language Model Agent
 
-本目录实现了一个基于视觉语言模型（VLM）的机械臂自主代理系统，支持通过自然语言指令和视觉反馈控制机械臂执行复杂任务。
+This directory implements an autonomous robotic arm agent system based on Vision Language Models (VLM), supporting control of the arm through natural language instructions and visual feedback for complex tasks.
 
-## 核心模块
+## Core Modules
 
-### 1. **vlm.py** - 视觉语言模型接口
+### 1. **vlm.py** - Vision Language Model Interface
 
-封装与智谱 AI 视觉语言模型的交互，用于物体检测和目标定位。
+Encapsulates interaction with Zhipu AI Vision Language Models for object detection and target localization.
 
-**主要功能：**
-- 图像编码为 Base64 格式
-- 调用 GLM-4.5V 模型进行物体检测
-- 返回归一化边界框坐标 [xmin, ymin, xmax, ymax]
-- 智能处理像素坐标和归一化坐标的转换
+**Main Features:**
+- Encode images to Base64 format
+- Call GLM-4.5V model for object detection
+- Return normalized bounding box coordinates [xmin, ymin, xmax, ymax]
+- Smart handling of pixel and normalized coordinate conversion
 
-**核心类：**
+**Core Class:**
 ```python
 class VLMDetector:
     def __init__(self, image_width=1920, image_height=1080)
     def get_object_bbox(self, target_description: str, image_path: Path) -> Optional[List[float]]
 ```
 
-**使用示例：**
+**Usage Example:**
 ```python
 from vlm import VLMDetector
 from pathlib import Path
 
 detector = VLMDetector(image_width=1920, image_height=1080)
-bbox = detector.get_object_bbox("红色的方块", Path("image.jpg"))
-# 返回: [0.25, 0.25, 0.5, 0.5]
+bbox = detector.get_object_bbox("Red cube", Path("image.jpg"))
+# Returns: [0.25, 0.25, 0.5, 0.5]
 ```
 
 ---
 
-### 2. **llm.py** - 大语言模型接口
+### 2. **llm.py** - Large Language Model Interface
 
-调用大语言模型进行任务规划和决策。
+Calls Large Language Models for task planning and decision making.
 
-**主要功能：**
-- 自然语言任务理解
-- 运动规划序列生成
-- 多步骤任务分解
+**Main Features:**
+- Natural language task understanding
+- Motion planning sequence generation
+- Multi-step task decomposition
 
-**核心函数：**
+**Core Function:**
 ```python
 def plan_robot_tasks(task_description: str) -> List[str]
 ```
 
 ---
 
-### 3. **stt.py** - 语音转文本
+### 3. **stt.py** - Speech-to-Text
 
-支持语音输入，将语音转换为文本指令。
+Supports voice input, converting speech into text instructions.
 
-**主要功能：**
-- 实时语音识别
-- 支持中英文混合
-- 返回识别的文本指令
+**Main Features:**
+- Real-time speech recognition
+- Supports mixed Chinese and English
+- Returns recognized text instructions
 
 ---
 
-### 4. **agent.py** - 主代理逻辑
+### 4. **agent.py** - Main Agent Logic
 
-整合 VLM、LLM 和机械臂控制，实现完整的自主任务执行流程。
+Integrates VLM, LLM, and arm control to implement a complete autonomous task execution workflow.
 
-**核心类：**
+**Core Classes:**
 
 #### CameraCalibrator
-相机坐标系到世界坐标系的转换。
+Handles transformation from camera coordinate system to world coordinate system.
 
 ```python
 class CameraCalibrator:
@@ -75,7 +75,7 @@ class CameraCalibrator:
     def convert(self, px: float, py: float) -> List[float]
 ```
 
-**校准配置示例：**
+**Calibration Config Example:**
 ```python
 CALIBRATION_CONFIG = {
     "image_width": 1920,
@@ -88,7 +88,7 @@ CALIBRATION_CONFIG = {
 ```
 
 #### RobotController
-封装所有机械臂物理动作。
+Encapsulates all physical robotic arm actions.
 
 ```python
 class RobotController:
@@ -100,109 +100,109 @@ class RobotController:
 
 ---
 
-## 工作流程
+## Workflow
 
 ```
-用户指令 (语音/文本)
+User Instruction (Voice/Text)
     ↓
-LLM 任务规划 → 生成子任务序列
+LLM Task Planning → Generate sub-task sequence
     ↓
-循环执行每个子任务：
-    ├─ 移动到观察位置
-    ├─ 拍照
-    ├─ VLM 物体检测 → 获取像素坐标
-    ├─ 相机校准 → 转换为世界坐标
-    ├─ 移动到目标位置
-    ├─ 执行抓取/放置
-    └─ 返回待命位置
+Execute each sub-task in loop:
+    ├─ Move to observation position
+    ├─ Take photo
+    ├─ VLM Object Detection → Get pixel coordinates
+    ├─ Camera Calibration → Convert to world coordinates
+    ├─ Move to target position
+    ├─ Execute Pick/Place
+    └─ Return to standby position
     ↓
-任务完成
+Task Complete
 ```
 
 ---
 
-## 使用方式
+## Usage
 
-### 基础使用
+### Basic Usage
 
 ```bash
 python3 agent.py
 ```
 
-### 环境变量配置
+### Environment Variable Configuration
 
 ```bash
 export ZHIPUAI_API_KEY="your_api_key_here"
 ```
 
-### 自定义校准
+### Custom Calibration
 
-编辑 `agent.py` 中的 `CALIBRATION_CONFIG`：
+Edit `CALIBRATION_CONFIG` in `agent.py`:
 
-1. 在 RViz 中标记两个已知世界坐标的点
-2. 记录这两个点在图像中的像素坐标
-3. 更新配置中的 `point1_px`、`point1_world`、`point2_px`、`point2_world`
+1. Mark two points with known world coordinates in RViz
+2. Find corresponding pixel coordinates in the image
+3. Update `point1_px`, `point1_world`, `point2_px`, `point2_world` in config
 
 ---
 
-## 目录结构
+## Directory Structure
 
 ```
 vlm_agent/
-├── vlm.py                      # VLM 接口
-├── llm.py                      # LLM 接口
-├── stt.py                      # 语音转文本
-├── agent.py                    # 主代理逻辑
-├── agent_total.py              # 完整代理实现
-├── checker.py                  # 任务检查器
-├── simple_moveit_controller.py # MoveIt 控制器
-├── latest_capture.jpg          # 最新拍照
-├── vlm_test_capture.jpg        # VLM 测试图像
-└── README.md                   # 本文件
+├── vlm.py                      # VLM interface
+├── llm.py                      # LLM interface
+├── stt.py                      # Speech-to-text
+├── agent.py                    # Main agent logic
+├── agent_total.py              # Complete agent implementation
+├── checker.py                  # Task checker
+├── simple_moveit_controller.py # MoveIt controller
+├── latest_capture.jpg          # Latest photo capture
+├── vlm_test_capture.jpg        # VLM test image
+└── README.md                   # This file
 ```
 
 ---
 
-## 关键特性
+## Key Features
 
-### 1. 相机校准
-- 支持两点校准法
-- 自动计算像素到世界坐标的映射
-- 处理图像坐标系和世界坐标系的差异
+### 1. Camera Calibration
+- Supports two-point calibration method
+- Automatic calculation of pixel-to-world mapping
+- Handles differences between image and world coordinate systems
 
-### 2. 智能坐标转换
-- VLM 返回的归一化坐标自动转换为像素坐标
-- 像素坐标通过校准转换为世界坐标
-- 支持自动检测和修正坐标格式
+### 2. Intelligent Coordinate Transformation
+- Normalized coordinates from VLM automatically converted to pixel coordinates
+- Pixel coordinates converted to world coordinates via calibration
+- Supports automatic detection and correction of coordinate formats
 
-### 3. 多步骤任务执行
-- LLM 自动分解复杂任务
-- 顺序执行子任务
-- 支持错误恢复和重试
+### 3. Multi-step Task Execution
+- LLM automatically decomposes complex tasks
+- Sequential execution of sub-tasks
+- Supports error recovery and retries
 
 ---
 
-## 依赖
+## Dependencies
 
-- ROS 2（Humble 或 Iron）
+- ROS 2 (Humble or Iron)
 - MoveIt 2
-- 智谱 AI SDK（`zai`）
-- OpenCV（`cv2`）
-- 其他：`python-dotenv`、`pyrealsense2`
+- Zhipu AI SDK (`zai`)
+- OpenCV (`cv2`)
+- Others: `python-dotenv`, `pyrealsense2`
 
 ---
 
-## 配置说明
+## Configuration Details
 
-### 目标 Z 高度
+### Target Z Height
 
 ```python
-TARGET_Z_HEIGHT = 0.12  # 单位：米
+TARGET_Z_HEIGHT = 0.12  # Unit: meters
 ```
 
-设置机械臂抓取和放置时的 Z 轴高度。
+Sets the Z-axis height for arm pick and place operations.
 
-### 图像尺寸
+### Image Dimensions
 
 ```python
 CALIBRATION_CONFIG = {
@@ -212,37 +212,37 @@ CALIBRATION_CONFIG = {
 }
 ```
 
-需要与实际相机分辨率匹配。
+Must match actual camera resolution.
 
 ---
 
-## 故障排除
+## Troubleshooting
 
-### VLM 返回像素坐标而非归一化坐标
+### VLM returns pixel coordinates instead of normalized coordinates
 
-系统会自动检测并转换。如果仍有问题，检查：
-- 图像尺寸配置是否正确
-- VLM 模型版本是否为 glm-4.5v
+The system automatically detects and converts. If issues persist, check:
+- Image dimension configuration is correct
+- VLM model version is glm-4.5v
 
-### 坐标转换不准确
+### Coordinate transformation inaccurate
 
-重新进行相机校准：
-1. 在 RViz 中标记两个已知点
-2. 在图像中找到对应的像素坐标
-3. 更新 `CALIBRATION_CONFIG`
+Redo camera calibration:
+1. Mark two known points in RViz
+2. Find corresponding pixel coordinates in image
+3. Update `CALIBRATION_CONFIG`
 
-### 机械臂无法连接
+### Arm cannot connect
 
-确保：
-- ROS 2 环境已正确 source
-- MoveIt 演示环境已启动
-- 机械臂硬件已连接
+Ensure:
+- ROS 2 environment is correctly sourced
+- MoveIt demo environment is started
+- Arm hardware is connected
 
 ---
 
-## 注意事项
+## Notes
 
-- 首次使用前必须进行相机校准
-- VLM 调用需要有效的 API 密钥
-- 建议在安全环境中测试
-- 所有坐标单位为米（m）和弧度（rad）
+- Camera calibration is mandatory before first use
+- VLM calls require a valid API key
+- Recommend testing in a safe environment
+- All coordinate units are in meters (m) and radians (rad)
